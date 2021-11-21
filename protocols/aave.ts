@@ -35,31 +35,36 @@ const onEvent = async (event: Result, signer: Wallet, spaceName: string, webhook
     const aip = res.data.aip;
 
     const quorum = await getQuorum();
-    const ipfsHash = await makeAaveSnapshot(signer, id, aip, propIpfs, title, endBlock, spaceName, quorum);
-    await messageDiscord(ipfsHash, aip, title, spaceName, webhook, quorum);
+//     const ipfsHash = await makeAaveSnapshot(signer, id, aip, propIpfs, title, endBlock, spaceName, quorum);
+    await messageDiscord(aip, title, id, propIpfs, webhook);
 
-    console.log(ipfsHash);
+//     console.log(ipfsHash);
 }
 
-const makeAaveSnapshot = async (
-  signer: Wallet,
-  id: number,
-  aip: number,
-  hash: string,
-  propTitle: string,
-  endBlock: number,
-  spaceName: string,
-  quorum: string
+// const makeAaveSnapshot = async (
+//   signer: Wallet,
+//   id: number,
+//   aip: number,
+//   hash: string,
+//   propTitle: string,
+//   endBlock: number,
+//   spaceName: string,
+//   quorum: string
+// ) => {
+
+//     const description = `This proposal is for voting on Aave's proposal #${aip} using DPI. Please review the proposal here: https://app.aave.com/governance/${id}-${hash} \n\n Quorum for this vote is ${quorum} INDEX.`
+//     const title = `[AAVE-${aip}] ${propTitle}`
+
+//     return postToSnapshotBlocknum(signer, title, description, endBlock, spaceName, ["For","Against"]);
+// }
+
+const messageDiscord = async (
+    aip: number, 
+    title: string, 
+    id: number, 
+    hash: string, 
+    webhook: string
 ) => {
-
-    const description = `This proposal is for voting on Aave's proposal #${aip} using DPI. Please review the proposal here: https://app.aave.com/governance/${id}-${hash} \n\n Quorum for this vote is ${quorum} INDEX.`
-    const title = `[AAVE-${aip}] ${propTitle}`
-
-    return postToSnapshotBlocknum(signer, title, description, endBlock, spaceName, ["For","Against"]);
-}
-
-const messageDiscord = async (ipfsHash: string, aip: number, title: string, spaceName: string, webhook: string, quorum: string) => {
-    const message = `A new proposal has been created for [AAVE-${aip}] ${title}. This proposal is for voting on Aave's proposal #${aip} using DPI. Please review the proposal here: https://snapshot.org/#/${spaceName}/proposal/${ipfsHash} \n\n Quorum for this vote is ${quorum} INDEX.`
-    await postToSlack(message, process.env.SLACK_WEBHOOK);
+    const message = `A new proposal has been created for [AAVE-${aip}] ${title}. Please review the proposal here: https://app.aave.com/governance/${id}-${hash}.`
     return await postToDiscord(message, webhook);
 }
