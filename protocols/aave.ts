@@ -34,7 +34,7 @@ const onEvent = async (event: Result, signer: Wallet, spaceName: string, webhook
     const title = titleRaw.length < 250 ? titleRaw : "";
     const aip = res.data.aip;
 
-    const quorum = await getQuorum();
+//     const quorum = await getQuorum();
 //     const ipfsHash = await makeAaveSnapshot(signer, id, aip, propIpfs, title, endBlock, spaceName, quorum);
     await messageDiscord(aip, title, id, propIpfs, webhook);
 
