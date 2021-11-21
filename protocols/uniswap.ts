@@ -27,23 +27,31 @@ const onEvent = async (event: Result, signer: Wallet, spaceName: string, webhook
     const propTitleRaw = d.length > 1 ? d[1].trim() : "";
     const propTitle = propTitleRaw.length < 250 ? propTitleRaw : "";
 
-    const quorum = await getQuorum();
-    const ipfsHash = await makeUniSnapshot(signer, id, propTitle, endBlock, spaceName, quorum);
+//     const quorum = await getQuorum();
+//     const ipfsHash = await makeUniSnapshot(signer, id, propTitle, endBlock, spaceName, quorum);
+//     await messageDiscord(ipfsHash, id, propTitle, spaceName, webhook, quorum);
     await messageDiscord(ipfsHash, id, propTitle, spaceName, webhook, quorum);
 
-    console.log(ipfsHash);
+//     console.log(ipfsHash);
 }
 
-const makeUniSnapshot = async (signer: Wallet, id: number, desc: string, endBlock: number, spaceName: string, quorum: string) => {
+// const makeUniSnapshot = async (signer: Wallet, id: number, desc: string, endBlock: number, spaceName: string, quorum: string) => {
 
-    const description = `This proposal is for voting on Uniswap's proposal 1.${id} using DPI. Please review the proposal here: https://app.uniswap.org/#/vote/2/${id} \n\n Quorum for this vote is ${quorum} INDEX.`
-    const title = `[UNISWAP-1.${id}] ${desc}`
+//     const description = `This proposal is for voting on Uniswap's proposal 1.${id} using DPI. Please review the proposal here: https://app.uniswap.org/#/vote/2/${id} \n\n Quorum for this vote is ${quorum} INDEX.`
+//     const title = `[UNISWAP-1.${id}] ${desc}`
 
-    return postToSnapshotBlocknum(signer, title, description, endBlock, spaceName, ["For","Against"]);
-}
+//     return postToSnapshotBlocknum(signer, title, description, endBlock, spaceName, ["For","Against"]);
+// }
 
-const messageDiscord = async (ipfsHash: string, id: number, desc: string, spaceName: string, webhook: string, quorum: string) => {
-    const message = `A new proposal has been created for [UNISWAP-1.${id}] ${desc}. This proposal is for voting on Uniswap's proposal 1.${id} using DPI. Please review the proposal here: https://snapshot.org/#/${spaceName}/proposal/${ipfsHash} \n\n Quorum for this vote is ${quorum} INDEX.`
-    await postToSlack(message, process.env.SLACK_WEBHOOK);
+const messageDiscord = async (
+//     ipfsHash: string, 
+    id: number, 
+    desc: string, 
+//     spaceName: string, 
+    webhook: string, 
+//     quorum: string
+) => {
+    const message = `A new proposal has been created for [UNISWAP-1.${id}] ${desc}. Please review the proposal here: https://app.uniswap.org/#/vote/2/${id}.`
+//     await postToSlack(message, process.env.SLACK_WEBHOOK);
     return await postToDiscord(message, webhook);
 }
